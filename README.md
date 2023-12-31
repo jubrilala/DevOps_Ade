@@ -13,6 +13,16 @@
 <img width="445" alt="Merging a baranch to another branch_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ac388b9b-adc2-440e-af7c-3dfd06d918a3">
 <img width="451" alt="Merging a baranch to another branch_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a70c6e39-6ed8-4246-b17c-88b927ebd13a">
 
+## Pushing from local to remote repository
+<img width="439" alt="Pushing from local to remote repository" 
+  src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/9228b873-a20b-4b3c-add8-759382449e30">
+
+  ## Cloning remote git repository
+  <img width="455" alt="Cloning remote git repository" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b408a79a-3e83-47eb-8faa-87f9cc6b1a39">
+
+
+
+
 
 
 

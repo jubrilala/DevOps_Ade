@@ -1,1 +1,2 @@
-Practising DevOps from zero to hero
+# DevOps practise
+Practising DevOps with GitHub

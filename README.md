@@ -1,4 +1,9 @@
 # LAMP Stack Project
+## cd Download for ssh key pair
+<img width="857" alt="cd Download for key pair" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/66697b2a-1e2a-4ebe-9a92-a2db7dc2a021">
+## ssh with then key pair
+<img width="722" alt="ssh with the key pair" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a0702960-992c-4af5-9aae-fb2ad1c3ef6f">
+
 ## Connecting to ec2 server
 <img width="876" alt="1_Ubuntu server login on AWS EC2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6355e02c-b637-425c-8053-adcde9573650">
 
@@ -21,6 +26,20 @@
 ## Installing php
 <img width="769" alt="8_installing php_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/926be819-b13d-464c-8a84-03c294f66557">
 <img width="764" alt="8_installing php_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/504893ce-da32-4637-bfa1-7652222edd63">
+
+## Enable php on the web site
+<img width="664" alt="Enable php on the website_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/4dd4d6c1-5e15-44da-a07b-8c54114e07e3">
+<img width="572" alt="Enable php on the website_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b827df41-b9b3-45ce-8328-3b7a053afa35">
+
+
+## creating a virtual host for web site
+<img width="481" alt="creating a virtual host for web site_3" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/83360390-b6a8-4b9e-9649-3707ad413e2e">
+<img width="616" alt="creating a virtual host for web site_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/34923825-3ae8-410b-b819-d5e495620b32">
+<img width="637" alt="creating a virtual host for web site_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/cd5dc0f5-130b-480a-8312-22c264e45c24">
+<img width="769" alt="creating a virtual host for web site_4" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b7ce754f-585e-42ef-b23c-0bc352bce158">
+
+
+
 
 
 

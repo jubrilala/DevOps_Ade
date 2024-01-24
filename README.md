@@ -1,4 +1,10 @@
 # LAMP Stack Project
+## EC2 instance started and running
+<img width="899" alt="EC2 instance started and running" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/30effeb1-f448-4613-ae4f-0d02c5283ee0">
+
+## Key Pair generated
+<img width="920" alt="Key pair generated" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/53424ec0-2569-4111-828d-663f291cc19f">
+
 ## cd Download for ssh key pair
 <img width="857" alt="cd Download for key pair" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/66697b2a-1e2a-4ebe-9a92-a2db7dc2a021">
 ## ssh with then key pair
@@ -6,6 +12,9 @@
 
 ## Connecting to ec2 server
 <img width="876" alt="1_Ubuntu server login on AWS EC2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6355e02c-b637-425c-8053-adcde9573650">
+
+## Edit inbound rule
+<img width="751" alt="Edit inbound rule" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/e6a47245-9e4a-47c8-a7c8-b513872cd877">
 
 ## Installing apache server
 <img width="563" alt="5_check apache server is accessible locally_3" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/25982c2c-fadd-4849-8732-0a0377edde2c">
@@ -15,6 +24,7 @@
 <img width="669" alt="3_Run apache2 package installation_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ec0e0566-0a35-429e-a362-d4269a44b93d">
 <img width="764" alt="2_Installing Apache_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2567df42-f50d-4c90-b65b-9c3a2f2253fb">
 <img width="764" alt="2_Installing apache_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/72675ca7-23b3-4a0b-a35a-d49a142ac3d7">
+
 
 ## Installing mysql server
 <img width="602" alt="7_my sql installatn completed" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/66afe1b7-429a-4bd4-93ac-bd15eb9423c8">
@@ -33,6 +43,8 @@
 
 
 ## creating a virtual host for web site
+To create a virtual host for my website files using apache, we create a directory “projectlamp” Then change ownership :
+
 <img width="481" alt="creating a virtual host for web site_3" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/83360390-b6a8-4b9e-9649-3707ad413e2e">
 <img width="616" alt="creating a virtual host for web site_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/34923825-3ae8-410b-b819-d5e495620b32">
 <img width="637" alt="creating a virtual host for web site_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/cd5dc0f5-130b-480a-8312-22c264e45c24">

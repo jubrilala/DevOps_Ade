@@ -50,6 +50,45 @@ To create a virtual host for my website files using apache, we create a director
 <img width="637" alt="creating a virtual host for web site_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/cd5dc0f5-130b-480a-8312-22c264e45c24">
 <img width="769" alt="creating a virtual host for web site_4" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b7ce754f-585e-42ef-b23c-0bc352bce158">
 
+## Created a new configuration file by running the command
+ sudo vi /etc/apache2/sites-available/projectlamp.conf
+ We place the following in the file we created
+
+<VirtualHost *:80>
+    ServerName projectlamp
+    ServerAlias www.projectlamp 
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/projectlamp
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+ <img width="611" alt="enable new virtual host" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/fe9b9b86-6354-438b-b512-47f27b28bfd2">
+
+## enable the new virtual host
+sudo a2ensite projectlamp
+## disable the default website that comes with apache.
+sudo a2dissite 000-default
+### Test config file
+sudo apache2ctl configtest 
+## reload the apache webserver
+sudo systemctl reload apache2
+<img width="611" alt="enable new virtual host" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a8df2989-e150-48c1-8b6b-de039f8df2a1">
+
+## enable PHP on the website, we open this file and edit it:
+sudo vim /etc/apache2/mods-enabled/dir.conf
+<img width="756" alt="Enable php on the website" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/8124b767-8ce3-47af-a67e-0ee6e1b97e20">
+
+## Create and open another file in “projectlamp” named “index.php”
+vim /var/www/projectlamp/index.php
+Add this to the file
+
+<?php
+phpinfo();
+<img width="892" alt="create and open another file in project lamp" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/7446d2af-fe53-47ed-9325-aee25cee0415">
+
+
+
+
 
 
 

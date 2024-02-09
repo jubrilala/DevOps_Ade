@@ -1,14 +1,19 @@
-# LAMP Stack Project
-## EC2 instance started and running
-<img width="899" alt="EC2 instance started and running" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/30effeb1-f448-4613-ae4f-0d02c5283ee0">
+# LEMP Stack Project
+## EC2 instance launched and running
+<img width="960" alt="launch EC2 instant" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/7ea0d0f8-184a-401d-97c6-3c1ca1773d69">
+## We launch Git bash and run below cmd to connect to ec2 public IP
+##ssh -i LEMP.pem ubuntu@18.221.143.192
+![1_Launch Git and Connect with ssh key](https://github.com/jubrilala/DevOps_Ade/assets/88538653/1c7c4a0b-7f34-48f9-a8c0-18b227ff171a)
 
-## Key Pair generated
-<img width="920" alt="Key pair generated" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/53424ec0-2569-4111-828d-663f291cc19f">
+## Install Nginx web server
+# sudo apt update
+# $ sudo apt install nginx -y
+![2_Apt update](https://github.com/jubrilala/DevOps_Ade/assets/88538653/56ae16b0-c857-46f3-914c-7657fe85c29f)
+![3_Install Nginx](https://github.com/jubrilala/DevOps_Ade/assets/88538653/419a7daf-ea97-4675-b518-49ab187d15be)
+# Verify that Nginx is successfully installed
+# sudo systemctl status nginx
+![4_verify Nginx installed](https://github.com/jubrilala/DevOps_Ade/assets/88538653/d98a30b2-5634-4de8-91d2-3ab9016c9bf1)
 
-## cd Download for ssh key pair
-<img width="857" alt="cd Download for key pair" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/66697b2a-1e2a-4ebe-9a92-a2db7dc2a021">
-## ssh with then key pair
-<img width="722" alt="ssh with the key pair" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a0702960-992c-4af5-9aae-fb2ad1c3ef6f">
 
 ## Connecting to ec2 server
 <img width="876" alt="1_Ubuntu server login on AWS EC2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6355e02c-b637-425c-8053-adcde9573650">

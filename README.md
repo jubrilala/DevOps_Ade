@@ -134,8 +134,7 @@ http://18.221.143.192:80
 
 ## Test PHP with Nginx
 $ nano /var/www/projectLEMP/info.php
-<?php
-phpinfo();
+
 ![16_creating a test php file](https://github.com/jubrilala/DevOps_Ade/assets/88538653/f49e1f94-7227-4f4b-8917-e0666d9b8039)
 ![17_accessing the page](https://github.com/jubrilala/DevOps_Ade/assets/88538653/f1d871bc-c4f0-44c1-bbc6-e3cefe608c22)
 
@@ -183,7 +182,6 @@ $ nano /var/www/projectLEMP/todo_list.php
 
 The php script connect to the DB and query for the content of todo_listtable
 Copy this content into your todo_list.php script
-<?php
 $user = "example_user";
 $password = "PassWord.1";
 $database = "example_database";

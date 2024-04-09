@@ -46,6 +46,9 @@ mysql> select user,host from mysql.user;
 sudo mysql -h 172.31.0.4 -u testuser -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; 
+
+## Check that you siuccessfully loging to remote mysql server and can perform sql queries
+Show databases;
 <img width="601" alt="8_login to mysql server from the mysql client" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/0f7860fb-501f-48ca-b63b-f3cfa040fe5d">
 
 

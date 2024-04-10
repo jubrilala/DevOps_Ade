@@ -90,6 +90,8 @@ sudo systemctl restart nginx
 
 <img width="494" alt="15_test configuration and restart nginix" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/769801e0-8bf0-4049-b1bb-25c6ecc99213">
 
+# check that the page is serve
+<img width="512" alt="10_check that your page work" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2b93aca6-f750-422c-a4e9-610300c440aa">
 
 
 

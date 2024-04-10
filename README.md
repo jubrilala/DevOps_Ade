@@ -87,6 +87,7 @@ edit config file with below and insert the IPs
 sudo nginx -t
 ## restart nginix
 sudo systemctl restart nginx
+
 <img width="494" alt="15_test configuration and restart nginix" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/769801e0-8bf0-4049-b1bb-25c6ecc99213">
 
 

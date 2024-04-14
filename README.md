@@ -1,97 +1,149 @@
-# Nginx as a load balancer Project
-## Launch 2 ubuntu server 
-<img width="905" alt="1_launch 2 ubuntu server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/498c76ff-8fd4-42c1-a1aa-f0341cd624e9">
+# automate deployment of server with nginx
+## launch server1 , 2 and nginx
+<img width="907" alt="0_launch server1, 2 and nginx" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/56f4fd02-b0ba-4b1b-a802-991edd99f324">
 
-##  Install apache2
+## server 1 and 2
+Open a file with below cmd and paste the file below
+    sudo vi install.sh
+
+    #!/bin/bash
+
+####################################################################################################################
+##### This automates the installation and configuring of apache webserver to listen on port 8000
+##### Usage: Call the script and pass in the Public_IP of your EC2 instance as the first argument as shown below:
+######## ./install_configure_apache.sh 127.0.0.1
+####################################################################################################################
+
+set -x # debug mode
+set -e # exit the script if there is an error
+set -o pipefail # exit the script when there is a pipe failure
+
+PUBLIC_IP=$1
+
+[ -z "${PUBLIC_IP}" ] && echo "Please pass the public IP of your EC2 instance as an argument to the script" && exit 1
+
 sudo apt update -y &&  sudo apt install apache2 -y
-<img width="908" alt="3_apt install apache2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/3b67f464-bb64-4368-90bf-b26baefe2c79">
-<img width="869" alt="2_apt update" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2608a4bd-7b28-4a4d-8d36-5f38ab00fad8">
-## verify that apache2 is running
+
 sudo systemctl status apache2
-<img width="586" alt="4_verify apache2 running" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ce914b6d-c7c4-42a7-b439-6b66ec5e12f5">
 
-## configure apache to serve content on port 8000
-sudo vi /etc/apache2/ports.conf 
-sudo vi /etc/apache2/sites-available/000-default.conf
-<img width="605" alt="6_change virtual port from 80 to 8000" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/5959b469-8bc2-4085-ab69-1f3bd81c2e6b">
-<img width="509" alt="5_add listen port 8000" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/f24a7b33-09fc-41d6-a255-1aacb1b39937">
+if [[ $? -eq 0 ]]; then
+    sudo chmod 777 /etc/apache2/ports.conf
+    echo "Listen 8000" >> /etc/apache2/ports.conf
+    sudo chmod 777 -R /etc/apache2/
 
-##  restart appache to load new config
-sudo systemctl restart apache2
-<img width="481" alt="7_restart apache2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/51ac36fb-d35d-40fe-ae16-020772c44007">
+    sudo sed -i 's/<VirtualHost \*:80>/<VirtualHost *:8000>/' /etc/apache2/sites-available/000-default.conf
 
-## create a new html file
-sudo vi index.html
-
-        <!DOCTYPE html>
+fi
+sudo chmod 777 -R /var/www/
+echo "<!DOCTYPE html>
         <html>
         <head>
             <title>My EC2 Instance</title>
         </head>
         <body>
             <h1>Welcome to my EC2 instance</h1>
-            <p>Public IP: 3.139.108.200</p>
+            <p>Public IP: "${PUBLIC_IP}"</p>
         </body>
-        </html>
-<img width="494" alt="8_edit the html file with ec2 public IP" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/16f882d3-5e49-45a2-a945-e2a3d69e8ae5">
-
-## change file ownership of index.html file
-sudo chown www-data:www-data ./index.html
-replace html file with new htlm file
-sudo cp -f ./index.html /var/www/html/index.html
-<img width="558" alt="9_chnage html file ownership, replace with new file and restart apache2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/67ca679a-936f-4a66-9f25-225cadc22595">
-## restart appache2
-sudo systemctl restart apache2
-
-##  verify that the apache2 is serving
-<img width="512" alt="10_check that your page work" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/75bf42eb-2411-4980-a76b-ebd07f7e6332">
-
-## launch ubuntu server for nignix
-<img width="895" alt="11_ubuntu Nginix server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/c264f9cc-5ecf-471a-b117-b9138ebaf241">
-
-## install nginix
-sudo apt update -y && sudo apt install nginx -y
-<img width="724" alt="12_update and install nginix" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6c636968-0651-471c-a06d-e3d72f95ea8e">
-
-## verify nginix is installed
-sudo systemctl status nginx
-<img width="805" alt="13_verify nginix is installed" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/42354d2e-261f-42ea-a1ed-28a951278fe4">
-
-## open nginix config with cmd below
-sudo vi /etc/nginx/conf.d/loadbalancer.conf
-edit config file with below and insert the IPs
+        </html>" > /var/www/html/index.html
         
-        upstream backend_servers {
+sudo systemctl restart apache2
+<img width="752" alt="1_ sudo vi install" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/845fceb1-02cb-4624-87e9-a54bcfb6fe75">
+
+## change file permission
+    sudo chmod +x install.sh
+
+## run the script on server 1 and 2
+    ./install.sh 3.12.147.187
+    ./install.sh 52.14.222.39
+<img width="752" alt="2_install_server1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d04a9a3a-df03-4c13-872c-f62aeaff44a0">
+<img width="775" alt="3_install_server2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/13e7650b-a877-47cd-a15f-eec8ae041300">
+
+## on nginx
+Open a file with below cmd and paste the file below
+    sudo vi nginx.sh
+
+#!/bin/bash
+
+######################################################################################################################
+##### This automates the configuration of Nginx to act as a load balancer
+##### Usage: The script is called with 3 command line arguments. The public IP of the EC2 instance where Nginx is installed
+##### the webserver urls for which the load balancer distributes traffic. An example of how to call the script is shown below:
+##### ./configure_nginx_loadbalancer.sh PUBLIC_IP Webserver-1 Webserver-2
+#####  ./configure_nginx_loadbalancer.sh 127.0.0.1 192.2.4.6:8000  192.32.5.8:8000
+############################################################################################################# 
+
+PUBLIC_IP=$1
+firstWebserver=$2
+secondWebserver=$3
+
+[ -z "${PUBLIC_IP}" ] && echo "Please pass the Public IP of your EC2 instance as the argument to the script" && exit 1
+
+[ -z "${firstWebserver}" ] && echo "Please pass the Public IP together with its port number in this format: 127.0.0.1:8000 as the second argument to the script" && exit 1
+
+[ -z "${secondWebserver}" ] && echo "Please pass the Public IP together with its port number in this format: 127.0.0.1:8000 as the third argument to the script" && exit 1
+
+set -x # debug mode
+set -e # exit the script if there is an error
+set -o pipefail # exit the script when there is a pipe failure
+
+
+sudo apt update -y && sudo apt install nginx -y
+sudo systemctl status nginx
+
+if [[ $? -eq 0 ]]; then
+    sudo touch /etc/nginx/conf.d/loadbalancer.conf
+
+    sudo chmod 777 /etc/nginx/conf.d/loadbalancer.conf
+    sudo chmod 777 -R /etc/nginx/
+
+    
+    echo " upstream backend_servers {
 
             # your are to replace the public IP and Port to that of your webservers
-            server 127.0.0.1:8000; # public IP and port for webserser 1
-            server 127.0.0.1:8000; # public IP and port for webserver 2
+            server  "${firstWebserver}"; # public IP and port for webserser 1
+            server "${secondWebserver}"; # public IP and port for webserver 2
 
-        }
+            }
 
-        server {
+           server {
             listen 80;
-            server_name <your load balancer's public IP addres>; # provide your load balancers public IP address
+            server_name "${PUBLIC_IP}";
 
             location / {
-                proxy_pass http://backend_servers;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_pass http://backend_servers;   
             }
-        }
+    } " > /etc/nginx/conf.d/loadbalancer.conf
+fi
 
-<img width="494" alt="14_edit load balancer config file" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/e1b1ae90-3f51-4883-baad-32f9d2ed8226">
-
-##  test your configuration with cmd below
 sudo nginx -t
-## restart nginix
+
 sudo systemctl restart nginx
+!<img width="757" alt="4_ sudo vi install_nginx" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/1715a9a8-c179-4056-9bd6-6af3bbf8f7fe">
+<img width="727" alt="5_  install_nginx" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b8d83e2d-0b2d-41cb-b457-8460edc4589f">
 
-<img width="494" alt="15_test configuration and restart nginix" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/769801e0-8bf0-4049-b1bb-25c6ecc99213">
 
-# check that the page is serve
-<img width="512" alt="10_check that your page work" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2b93aca6-f750-422c-a4e9-610300c440aa">
+## ## change file permission
+
+    sudo chmod +x nginx.sh
+## run the script on for nginx
+./nginx.sh 3.12.147.187 52.14.222.39 :8000
+
+<img width="616" alt="6_Screenshot for web server1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/3f672b12-f588-4ea3-bfdf-5fd2aa9eb518">
+<img width="741" alt="6_Screenshot for web server2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/efc09ec0-46fe-4cf4-93e7-5a874d83cdb0">
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
 
 
 

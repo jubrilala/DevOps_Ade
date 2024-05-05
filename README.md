@@ -124,7 +124,11 @@ ssh -A ubuntu@13.59.10.120
 <img width="954" alt="24_check ssh key_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/17518929-4f3a-4fd4-a86d-b7a0a77d93fa">
 <img width="789" alt="25_connect with ssh agent" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d614ed24-faa3-42d3-9efb-67034a45f494">
 
-## check that the playbook run successfully
+## run ansible playbook and verify that it worked
+from the jenkins directory
+/var/dev/jobs/Adefreestyle/builds/3/archive
+execute  ansible playbook command
+ansible-playbook -i inventory/dev.yml playbooks/common.yml
 <img width="948" alt="26_ansible playbook succesful" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/02dccb62-0071-40c1-b8c2-eb38e761ee1c">
 
 

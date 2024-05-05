@@ -1,192 +1,142 @@
-# implemeting wordpress website with LVM storage mgt
- # prepare a web server
- Launch ec2 instance that will serve as web server
-<img width="920" alt="1_launch ec2 redhat" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ebfa5c2e-5cee-4932-bb92-53c53c01cd69">
+# Asible Automate project
+## update jenkins ec2 name Jenkins-Ansible 
+<img width="914" alt="1_jenkins-ansible ec2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d0176f8a-2be3-407e-bd9b-0a5d2c4654b1">
 
- # create and attach 3 volumes in the same AZ as your web server, each of 10G
-<img width="920" alt="1_create 3 EBS volume and attached to ec2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/1978cb83-fc13-4d16-b8a8-48b894634891">
+ ## create a repository Ansible-Config-Mgt on github
+ <img width="957" alt="1a_create ansible-config-magt repo on github" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/24d248c9-39aa-4d24-9a45-5e81749de6ec">
+
+## Install ansible on Jenkins-Ansible ec2
+sudo apt update
+sudo apt install ansible -y
+<img width="705" alt="3_check ansible version" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6a2902d0-d2cc-43dc-a337-272456799da8">
+<img width="796" alt="2_install ansible on ec2 server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/8f7f8abb-0a3f-45be-a55c-8c5281f7707a">
+
+## Configure jenkin build job to archive your repository content
+create a freestyle project in Jenkins and point to ansible-config-mgt repo
+<img width="957" alt="4_create new freestyle" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/062f90ad-692a-4f87-aa6d-9484e80978f9">
+
+Configure webhook in github and point it to ansible-config-mgt repo
+<img width="938" alt="5_configure webhook" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/7005abee-376a-4736-804d-1c56073f9600">
+configure a post-build job to save all ** files 
+<img width="940" alt="6_configure a post build job" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/0306f941-bf4d-47e4-a974-08eceb2c75e1">
+
+## test set up by making changes in READ.ME file
+ls /var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/
+/var/lib/jenkins/jobs/AdeFreestyle/builds/2/archive
+cat /var/lib/jenkins/jobs/AdeFreestyle/builds/2/archive/README.md
+ansible-config-mgt
+my first repo cloning
+<img width="941" alt="7_make changes on readme" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d3e2ae34-188d-4197-a7cf-1c59992e943f">
+<img width="940" alt="8_check changes on github" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6f4cdb67-e708-4bb3-bd85-f9f8982c93fb">
+<img width="918" alt="9_check build on jenkins" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/90499eb4-271f-4f04-895f-1fedd73cb282">
+
+## Begin ansible development 
+
+git clone <ansible-config-mgt repo link>
+in ansible-config-mgt create branch and name feature
+<img width="944" alt="10_create a new branch_feature-ansible" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2c468d41-c5e6-4226-84c6-e9a586bafa19">
+checkout the feature branch and start building code in directory structure
+create a directory and name it playbook
+create a directory and name it inventory
+within playbook create common.yml folder
+with inventory create dev,staging,prod and uat inventory files
+<img width="944" alt="13_create common playbook_common yml" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/e5401ccd-2bcf-40f3-9f3d-2fcbc9a491bb">
+<img width="955" alt="12_create ansible_inventory_update_inventory_dev yml" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2b6805a6-12cb-4e19-86e4-09f81e297ccc">
+<img width="888" alt="11_create directories" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ba61d09e-67d1-47fc-bf6b-16f211f98ffa">
+<img width="938" alt="14_check git status after config of files in ansible_config_mgt" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a9c0459c-4df8-4daa-84f9-7e00d2e88dc8">
+
+## set up ansible inventory
+update /inventory.yml 
+ create ansible inventory 
+[nfs]
+<NFS-Server-Private-IP-Address> ansible_ssh_user=ec2-user  172.31.12.198
+
+[webservers]
+<Web-Server1-Private-IP-Address> ansible_ssh_user=ec2-user  172.31.13.176
+<Web-Server2-Private-IP-Address> ansible_ssh_user=ec2-user  172.31.7.246
+
+[db]
+<Database-Private-IP-Address> ansible_ssh_user=ec2-user 172.31.10.247
+
+[lb]
+<Load-Balancer-Private-IP-Address> ansible_ssh_user=ubuntu   172.31.15.156
+
+<img width="955" alt="12_create ansible_inventory_update_inventory_dev yml" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/e652432d-6f97-420a-8f9d-84818741f875">
+
+## create common playbook in common.yml file
+
+---
+- name: update web, nfs and db servers
+  hosts: webservers, nfs, db
+  become: yes
+  tasks:
+    - name: ensure wireshark is at the latest version
+      yum:
+        name: wireshark
+        state: latest
+   
+
+- name: update LB server
+  hosts: lb
+  become: yes
+  tasks:
+    - name: Update apt repo
+      apt: 
+        update_cache: yes
+
+    - name: ensure wireshark is at the latest version
+      apt:
+        name: wireshark
+        state: latest
+
+<img width="944" alt="13_create common playbook_common yml" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/9b6bc2f2-8954-4b47-9fbc-ed6737d0a6c1">
+
+# update your code main branch-make change in new branch-push to github, merge to main branch,checkout out from main branch-do git push
+<img width="938" alt="14_check git status after config of files in ansible_config_mgt" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ffec156d-4575-4722-a743-da12ce2279ec">
+<img width="941" alt="15_git commit" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/aea75271-566f-48ae-bf02-3f75293a73c9">
+<img width="941" alt="16_git push" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/5387e123-5f9a-4917-a7ad-61099f21c6d2">
+
+## Push on the github to merge the main and the branch
+<img width="936" alt="17_push_merge request" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/c41b5cc5-2a19-4e9b-8883-00a4d9c07d0b">
+<img width="957" alt="18_push_merge request_successful" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b494dac4-1465-436b-be74-50df0cb15153">
+<img width="943" alt="19_main_feauture branch merged" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/12032283-850e-4a51-a2b6-ee4e6d7ec575">
+
+## check on the jenkins that the build is triger
+<img width="957" alt="20_successful buid job on jenkins" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2f1d6018-4855-4851-b35d-6aded5325b00">
+
+## Update on the local repo the config 
+run git pull
+<img width="947" alt="21_checking branch on local machine not updated" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2297ede3-1aa7-44b0-bf31-e41e416fb6a2">
+<img width="953" alt="22_git pull to update files on local repo" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/e935147b-d5e3-4067-b581-afd097f8fbb1">
+
+## run ansible cmd with ssh agent
+ansible-playbook -i inventory/dev.yml playbooks/common.yml
+ssh agent set up
+eval `ssh-agent -s`
+ssh-add <path-to-private-key>
+
+!! ssh using ssh agent
+ssh -A ubuntu@public-ip
+ssh -A ubuntu@13.59.10.120
+
+<img width="959" alt="23_run ansible playbook" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/3697a347-23d0-457a-84b5-bd06d4ca1857">
+<img width="952" alt="24_check ssh key" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/35083808-557e-49d3-b3e8-15d994b1e6ef">
+<img width="954" alt="24_check ssh key_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/17518929-4f3a-4fd4-a86d-b7a0a77d93fa">
+<img width="789" alt="25_connect with ssh agent" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d614ed24-faa3-42d3-9efb-67034a45f494">
+
+## check that the playbook run successfully
+<img width="948" alt="26_ansible playbook succesful" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/02dccb62-0071-40c1-b8c2-eb38e761ee1c">
+
+
+
+
+
+
+
+
+
+
+ 
  
 
-#open up linux for configuration
- lsblk to inspect the devices attached to the server
-<img width="567" alt="3_inspect devices attached to the ec2 server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/97165078-48ef-4c23-a2fa-92699d65967a">
 
-# create single partition on each o the 3 disk
-sudo gdisk /dev/xvdb
-sudo gdisk /dev/xvdc
-sudo gdisk /dev/xvdd
-<img width="644" alt="4_create a single partition on each of the 3 disks" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/7496178e-4ece-43db-ad12-e75a7099dfdb">
-
-# install lvm2 and check 
-<img width="512" alt="6_install lvm2_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/15039843-9756-485b-99ea-dba15ccc451a">
-<img width="514" alt="5_install lvm2_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b9d29cb6-4cb0-4c83-8110-d3f01999d498">
-
-# check avaiable partition lvmsiskscan
- sudo lvmdiskscan
- <img width="506" alt="7_check available partition with lvmdiskscan and create physical vol" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d81a2850-3405-4b9a-8cf4-48c3e6404f6d">
-
-# mark each of the 3 disk as pv to be used by LVM
-sudo pvcreate /dev/xvdb1
-sudo pvcreate /dev/xvdc1
-sudo pvcreate /dev/xvdd1
-<img width="511" alt="8_sudo pvs" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/d68f9bd8-58d3-480c-9b30-80289f3e9bd5">
-
-# create vol group
-sudo vgcreate webdata-vg /dev/xvdd1 /dev/xvdc1 /dev/xvdb1
-
-# create logical vol
-sudo lvcreate -n apps-lv -L 14G webdata-vg    ***db-lv
-sudo lvcreate -n logs-lv -L 14G webdata-vg
-sudo vgdisplay -v #view complete setup - VG, PV, and LV
-sudo lsblk 
-<img width="519" alt="9_create logical vol" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/41428427-c5b1-4b85-80a9-768b9b558f0c">
-
-# Format the vol with ext4 file system
-sudo mkfs -t ext4 /dev/webdata-vg/apps-lv
-sudo mkfs -t ext4 /dev/webdata-vg/logs-lv
-<img width="502" alt="10_format the vol" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ecb71562-f9c0-4ab9-baec-f66fb1e3b6e1">
-
-# create directories
-mount apps-lv on /var/www/html
-sudo mount /dev/webdata-vg/apps-lv /var/www/html/  *** /db
-<img width="494" alt="11_create var_ directory and mount_18" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a096cbf7-5313-45cd-93e2-dc0473874944">
-
-# use rsync utility to backup file in the log directory /var/log intp /home/recovery
-sudo rsync -av /var/log/. /home/recovery/logs/
-<img width="509" alt="12_ rysync_ 20" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/f6c952b1-c46e-491a-98f1-e54ac4b78d18">
-
-# mount /var/log pm lofs-lv logical volume
-sudo mount /dev/webdata-vg/logs-lv /var/log
-<img width="494" alt="11_create var_ directory and mount_18" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/adb07e89-7ee2-40e4-84a3-00b4e57d1976">
-
-# restore log files back into /var/log directory
-sudo rsync -av /home/recovery/logs/log/. /var/log
-!from sudo blkid
-/dev/mapper/webdata--vg-apps--lv: UUID="1ace8b64-b492-4e0a-8652-b40ac2d44dbe" BLOCK_SIZE="4096" TYPE="ext4"
-/dev/mapper/webdata--vg-logs--lv: UUID="e3ad5c7f-6692-41b5-9ddc-4495c74d7363" BLOCK_SIZE="4096" TYPE="ext4"
-
-# update /etc/fstab file so that config will persist after restart
-/etc/fstab
-!from sudo blkid
-/dev/mapper/webdata--vg-apps--lv: UUID="1ace8b64-b492-4e0a-8652-b40ac2d44dbe" BLOCK_SIZE="4096" TYPE="ext4"
-/dev/mapper/webdata--vg-logs--lv: UUID="e3ad5c7f-6692-41b5-9ddc-4495c74d7363" BLOCK_SIZE="4096" TYPE="ext4"
- sudo vi /etc/fstab
- <img width="925" alt="13_sudo blkid" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/fc9a87c0-7631-4584-adda-f3f2142175e1">
- <img width="855" alt="14_edit etc_fstab" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2ec42526-0523-4370-a443-a081ed99fdf7">
-<img width="941" alt="14_a_sudo vi etc_fstab" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/3ce73cd8-af6c-4c1e-a477-f8cb336aeab9">
-
-
-# persist the mounting and test config
-sudo mount -a
-sudo systemctl daemon-reload
-<img width="919" alt="15_persist the mounting" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6a9d6f73-ae51-4a97-9f75-a204672bcb30">
-
-# install wordpress and configuration to use mysql database
-#launch an ec2 as DB server 
-<img width="917" alt="a_launch ec2 redhat for DB server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/0a0c5796-966f-499f-bccf-52fd59368523">
-
-# for DB server, create logical vol
-sudo lvcreate -n db-lv -L 28G webdata-vg    
-
-! Format the vol
-sudo mkfs -t ext4 /dev/webdata-vg/db-lv
-
-! mount apps-lv on /var/www/html
-sudo mount /dev/webdata-vg/apps-lv /var/www/html/  *** /db
-sudo mount /dev/webdata-vg/db-lv /db
-<img width="513" alt="16_for DB_create volume,directory  and mount" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/833916bf-46f8-4444-9710-4d869aefe611">
-
-# update /etc/fstab file so that config will persist after restart
-from sudo blkid
-UUID="86fafeee-9b27-4d33-919a-edfa0b753d14" BLOCK_SIZE="4096" TYPE="ext4"
-!edit the
-/etc/fstab
-# persist the mounting 
-sudo mount -a
-sudo systemctl daemon-reload
-
-<img width="947" alt="17_sudo blkid for db server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/13c7a161-8783-4a37-b6a3-85871bd98c78">
-
-<img width="504" alt="18_edit the etc_fstab persit mounting and reload" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/321a36c7-29ab-40f2-a974-70dd3af466e3">
-<img width="634" alt="19_edit etc_fstab_for DB server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/76e0d3e3-61e4-4fc1-9af5-81cfb51d7f81">
-
-# !Install wordpress on web server
-
-sudo systemctl enable httpd
-sudo systemctl start httpd
-<img width="493" alt="21_sudo yum install wget httpd" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/05dbfe48-390b-4a1c-8ad7-a4e6253d9117">
-<img width="891" alt="20_sudo yum update on ec2 server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/f546415f-10b2-464e-932c-da8e2ef7ebed">
-<img width="742" alt="22_enable appache " src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/33713034-51a8-413c-8341-40ab793dcca8">
-
-# install php and dependencies
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
-sudo yum module list php
-sudo yum module reset php
-sudo yum module enable php:remi-7.4
-sudo yum install php php-opcache php-gd php-curl php-mysqlnd
-sudo systemctl start php-fpm
-sudo systemctl enable php-fpm
-setsebool -P httpd_execmem 1
-<img width="956" alt="23_install php_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/cc399768-db58-4843-a8d2-6159c6352db7">
-<img width="812" alt="23_install php_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/1f15f4d1-bb11-4089-a300-813db3762c79">
-<img width="899" alt="23_install php_3" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/3ce5db20-298e-4d8f-b993-10ba91f263b5">
-<img width="935" alt="23_install php_5" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/abf47f39-469f-42dd-b5db-7b7d40b9c035">
-<img width="886" alt="23_install php_4" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/ca3dbea4-2e67-44bd-9952-6ede754b1f71">
-<img width="906" alt="23_install php_6" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/0fa66a35-3dc2-44c9-9796-067d9c5a9b0b">
-<img width="878" alt="23_install php_7" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/fcf7f29d-84c7-4b5d-b25c-4c2993ced631">
-
-# restart apache2
- sudo systemctl restart httpd
-
-# download wordpress to /var/www/html
-mkdir wordpress
-cd   wordpress
-sudo wget http://wordpress.org/latest.tar.gz
-sudo tar xzvf latest.tar.gz
-sudo rm -rf latest.tar.gz
-cp wordpress/wp-config-sample.php wordpress/wp-config.php
-cp -R wordpress /var/www/html/
-<img width="496" alt="24_download wordpress to var_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a8fc6504-2023-4ca5-91c3-e589b6637bce">
-<img width="512" alt="24_download wordpress to var_2" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/06f3a1f2-cc09-472e-80b0-2a25bbf3b89f">
-<img width="487" alt="24_download wordpress to var_3" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/b5443fad-3a1a-4437-b913-74b7f9e5dce7">
-
-! configure SElinux, permisiion for web server to work with php and connect to db
- sudo chown -R apache:apache /var/www/html/wordpress
- sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
- sudo setsebool -P httpd_can_network_connect=1
- 
-<img width="502" alt="25_configure SElinux" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/48fa7b6c-581e-43ec-8122-41049a66b864">
-
-# !install mysql on db server ec2
-sudo yum update
-sudo yum install mysql-server
-<img width="504" alt="26_install mysql on DB server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/6f67008f-5875-4a05-964b-e95743a2c02c">
-
-# start mysql
-sudo systemctl restart mysqld
-sudo systemctl enable mysqld
-<img width="493" alt="27_restart msq and enable" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/c6ce8da0-dada-4b75-90c0-a70f02a719cd">
-
-# configure DB to work with wordpress
-sudo mysql
-CREATE DATABASE wordpress;
-CREATE USER `myuser`@18.222.87.145 IDENTIFIED BY 'mypass';
-GRANT ALL ON wordpress.* TO 'myuser'@'18.222.87.145';
-FLUSH PRIVILEGES;
-SHOW DATABASES;<img width="494" alt="29_configure db to work with wordpress_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/76820b1f-58db-40b3-9e2a-d4c75c669606">
-exit
-
-
-# configure wordpress to connect to remote database
-<img width="877" alt="b_configure wordpress to connect to DB server" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/c00d43b0-9da9-43d1-8082-2d74d762f646">
-
-# on web server , install mysql client
-sudo yum install mysql
-sudo mysql -u myuser -p -h 172.31.39.75<img width="919" alt="30_wordpress page" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a58b1a2d-4a6c-43bb-9687-2cfeaa4449ea">
-
-
-<img width="494" alt="29_configure db to work with wordpress_1" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/a6693932-6688-4da0-8c9d-1b24d9ef9fe2">
-
-# trying accessing from browser 
-<img width="919" alt="30_wordpress page" src="https://github.com/jubrilala/DevOps_Ade/assets/88538653/2149b6af-b0bc-4863-a8d6-5f764faa404c">
